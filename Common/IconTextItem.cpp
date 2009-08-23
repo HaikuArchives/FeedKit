@@ -7,7 +7,7 @@ const rgb_color kHighlight = {140, 140, 140, 255};
 
 //#pragma mark Constructr
 
-IconTextItem::IconTextItem(const char *text, BBitmap *icon = NULL, bool own = true) 
+IconTextItem::IconTextItem(const char *text, BBitmap *icon, bool own) 
 	: fIcon(icon),
 	fIconWidth(0),
 	fIconHeight(0),

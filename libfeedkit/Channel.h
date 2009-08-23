@@ -9,14 +9,13 @@
 #include <String.h>
 
 #include <map>
-#include <vector>
 
 namespace FeedKit {
 	class Feed;
 	class Item;
 	class Enclosure;
 	
-	typedef map<BString, Item *> item_cache_t;
+	typedef std::map<BString, Item *> item_cache_t;
 	
 	class Channel : public BFlattenable {
 		public:

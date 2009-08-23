@@ -15,11 +15,11 @@ using namespace FeedKit::Private;
 
 //#pragma mark Typedefs
 
-typedef map<BString, Feed *> cache_feed_t;
-typedef map<BString, Channel *> cache_channel_t;
-typedef map<BString, Item *> cache_item_t;
-typedef map<BString, Enclosure *> cache_enclosure_t;
-typedef map<BString, Content *> cache_content_t;
+typedef std::map<BString, Feed *> cache_feed_t;
+typedef std::map<BString, Channel *> cache_channel_t;
+typedef std::map<BString, Item *> cache_item_t;
+typedef std::map<BString, Enclosure *> cache_enclosure_t;
+typedef std::map<BString, Content *> cache_content_t;
 
 //#pragma mark CacheHelper - Declaration
 

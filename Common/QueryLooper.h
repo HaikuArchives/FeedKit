@@ -19,10 +19,10 @@ typedef struct {
 	node_ref nref;
 } result;
 
-typedef map<entry_ref, result> result_t;
+typedef std::map<entry_ref, result> result_t;
 
-typedef vector<BVolume> volume_t;
-typedef vector<BQuery *> query_t;
+typedef std::vector<BVolume> volume_t;
+typedef std::vector<BQuery *> query_t;
 
 namespace QL {
 	namespace Notifications {

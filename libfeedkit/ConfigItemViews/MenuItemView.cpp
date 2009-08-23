@@ -44,7 +44,7 @@ void MenuItemView::Defaults(void) {
 };
 
 void MenuItemView::Save(BMessage &settings) {
-	vector<BMenuItem *> items;
+	std::vector<BMenuItem *> items;
 	BMenuItem *item = NULL;
 	int32 type = DataType();
 	BMessage *config = ConfigItem();

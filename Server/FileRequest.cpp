@@ -71,7 +71,7 @@ FileRequest::~FileRequest(void) {
 	curl_easy_cleanup(fCurl);
 	
 	for (handlerinfo_t::iterator rIt = fHandler.begin(); rIt != fHandler.end(); rIt++) {
-		delete (rIt);
+		delete (*rIt);
 	};
 };
 

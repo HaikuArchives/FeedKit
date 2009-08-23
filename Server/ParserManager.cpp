@@ -99,7 +99,7 @@ ParserManager::~ParserManager(void) {
 Feed *ParserManager::Parse(const char *url, const char *data, int32 length) {
 	Feed *feed = NULL;
 	parser_t::iterator pIt;
-	vector<FeedParser *> potential;
+	std::vector<FeedParser *> potential;
 
 	for (pIt = fParsers.begin(); pIt != fParsers.end(); pIt++) {
 		FeedParser *parser = pIt->second;

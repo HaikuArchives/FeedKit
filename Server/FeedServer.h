@@ -28,20 +28,20 @@ namespace FeedKit {
 	class DownloadProgress;
 };
 
-typedef map<BString, entry_ref> ref_uuid_t;
-typedef map<entry_ref, FeedKit::Feed *> reffeed_t;
-typedef map<BString, FeedKit::Feed *> urlfeed_t;
-typedef map<BString, SettingsFile *> feedsetting_t;
-typedef vector<BMessenger> listener_t;
-typedef map<BString, BMessageRunner *> refresh_t;
-typedef map<BString, FeedKit::Feed *> feed_uuid_t;
-typedef map<BString, FeedKit::Channel *> channel_uuid_t;
-typedef map<BString, FeedKit::Item *> item_uuid_t;
-typedef map<BString, FeedKit::Enclosure *> enclosure_uuid_t;
-typedef map<BString, BString> channel_icon_t;
-typedef map<BString, entry_ref> existing_enclosure_t;
+typedef std::map<BString, entry_ref> ref_uuid_t;
+typedef std::map<entry_ref, FeedKit::Feed *> reffeed_t;
+typedef std::map<BString, FeedKit::Feed *> urlfeed_t;
+typedef std::map<BString, SettingsFile *> feedsetting_t;
+typedef std::vector<BMessenger> listener_t;
+typedef std::map<BString, BMessageRunner *> refresh_t;
+typedef std::map<BString, FeedKit::Feed *> feed_uuid_t;
+typedef std::map<BString, FeedKit::Channel *> channel_uuid_t;
+typedef std::map<BString, FeedKit::Item *> item_uuid_t;
+typedef std::map<BString, FeedKit::Enclosure *> enclosure_uuid_t;
+typedef std::map<BString, BString> channel_icon_t;
+typedef std::map<BString, entry_ref> existing_enclosure_t;
 typedef status_t (FeedServer::*EventHandler)(BMessage *);
-typedef map<int32, EventHandler> eventhandler_t;
+typedef std::map<int32, EventHandler> eventhandler_t;
 
 class FeedServer : public BApplication, public ObjectSource {
 

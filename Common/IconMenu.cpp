@@ -113,7 +113,7 @@ void TIconMenu::DrawContent()
         Menu()->GetPreferredSize(&width, &height);
 
         BRect destBounds = bounds;
-        destBounds.OffsetBy(8.0, ((height - bounds.Height()) * 0.5) - 1);
+        destBounds.OffsetBy(8.0f, ((height - bounds.Height()) * 0.5f) - 1);
 
         // Scaling the icon is left as an exercise for the reader :)
         Menu()->DrawBitmap(iconLabel, bounds, destBounds);
@@ -126,7 +126,7 @@ void TIconMenu::DrawContent()
 
 //#pragma mark BArchivable Hooks
 
-status_t TIconMenu::Archive(BMessage *archive, bool deep = true) const {
+status_t TIconMenu::Archive(BMessage *archive, bool deep) const {
 	status_t result = BMenuItem::Archive(archive, deep);
 	if (result == B_OK) {
 		archive->ReplaceString("class", "TIconMenu");

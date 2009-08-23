@@ -10,7 +10,7 @@ using namespace FeedKit;
 
 //#pragma mark Constructor
 
-TraceFeedHandler::TraceFeedHandler(FILE *output = stderr)
+TraceFeedHandler::TraceFeedHandler(FILE *output)
 	: FeedHandler(),
 	fOutput(output) {
 };

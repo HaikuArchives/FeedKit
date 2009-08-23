@@ -13,9 +13,9 @@ class BMessageRunner;
 class RequestInfo;
 class FileRequest;
 
-typedef vector<FileRequest *> request_t;
-typedef vector<RequestInfo *> info_t;
-typedef map<thread_id, RequestInfo *> thread_t;
+typedef std::vector<FileRequest *> request_t;
+typedef std::vector<RequestInfo *> info_t;
+typedef std::map<thread_id, RequestInfo *> thread_t;
 
 class FileDaemon : public BLooper, public FileRequestHandler {
 	public:

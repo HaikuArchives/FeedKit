@@ -85,7 +85,7 @@ Channel::Channel(const Channel &rhs)
 	};
 };
 
-Channel::Channel(const Channel * const rhs, bool deep = true)
+Channel::Channel(const Channel * const rhs, bool deep)
 	: fFeed(rhs->fFeed),
 	fFeedUUID(rhs->fFeedUUID),
 	fUUID(""),

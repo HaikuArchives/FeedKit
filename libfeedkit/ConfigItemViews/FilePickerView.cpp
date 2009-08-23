@@ -16,6 +16,9 @@
 #include "Common/IMKitUtilities.h"
 
 #include <stdio.h>
+#ifdef __HAIKU__
+#	include <posix/compat/sys/stat.h>
+#endif
 
 //#pragma mark Namespace import
 
@@ -37,7 +40,11 @@ class DirFilter : public BRefFilter {
 		DirFilter(void) {
 		};
 		
+#ifdef __HAIKU__
+		bool Filter(const entry_ref *ref, BNode *node, struct stat_beos *st, const char *mime) {
+#else
 		bool Filter(const entry_ref *ref, BNode *node, struct stat *st, const char *mime) {
+#endif
 			bool result = false;
 			if (strcmp(mime, "application/x-vnd.Be-directory") == 0) {
 				result = true;
@@ -64,7 +71,7 @@ class DirFilter : public BRefFilter {
 
 //#pragma mark DragListView
 
-typedef map<entry_ref, IconTextItem *> refitem_t;
+typedef std::map<entry_ref, IconTextItem *> refitem_t;
 
 class DragListView : public BListView {
 	public:
@@ -227,13 +234,19 @@ class DragListView : public BListView {
 							BNode node(&ref);
 							BNodeInfo info(&node);
 							char mime[B_PATH_NAME_LENGTH];
-							struct stat st;
-							
-							info.GetType(mime);
-							stat(path.Path(), &st);
-							
 
-							add = fFilter->Filter(&ref, &node, &st, mime);
+							info.GetType(mime);
+
+							struct stat st;
+							stat(path.Path(), &st);
+
+#ifdef __HAIKU__
+							struct stat_beos stb;
+							convert_to_stat_beos(&st, &stb);
+							add = fFilter->Filter((const entry_ref *) &ref, &node, &stb, (const char *) mime);
+#else
+							add = fFilter->Filter((const entry_ref *) &ref, &node, &st, (const char *) mime);
+#endif
 						};
 						if (add) {
 							itemsAdded = true;

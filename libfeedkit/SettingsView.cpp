@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <algorithm>
+#include <map>
 
 //#pragma mark Namespace import
 
@@ -27,14 +28,14 @@ using namespace FeedKit::Settings;
 
 //#pragma mark Types
 
-typedef vector<BString> vec_str_t;
-typedef vector<int32> vec_int_t;
+typedef std::vector<BString> vec_str_t;
+typedef std::vector<int32> vec_int_t;
 
 // The Member Function Pointer for a view maker
 typedef ConfigItemView *(*ViewMaker)(const char *, const char *, Settings::display_type, int32,
 	float, float, BMessage, BMessage);
 // Maps a type to a maker
-typedef map<Settings::display_type, ViewMaker> maker_t;
+typedef std::map<Settings::display_type, ViewMaker> maker_t;
 
 //#pragma mark Global (Yes, bad, I know)
 
@@ -157,7 +158,7 @@ const float kPadding = 5.0f;
 //#pragma mark Constructor
 
 SettingsView::SettingsView(BRect frame, const char *appType, const char *name, uint32 resizing,
-	uint32 flags, BMessage tmplate, BMessage settings, BubbleHelper *helper = NULL)
+	uint32 flags, BMessage tmplate, BMessage settings, BubbleHelper *helper)
 	:BView(frame, name, resizing, flags),
 	fAutoStart(NULL),
 	fAppType(appType),

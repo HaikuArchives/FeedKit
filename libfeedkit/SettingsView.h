@@ -7,7 +7,6 @@
 #include <View.h>
 
 #include <vector>
-#include <map>
 
 class BCheckBox;
 class BubbleHelper;
@@ -17,7 +16,7 @@ namespace FeedKit {
 
 		class ConfigItemView;
 	
-		typedef vector<ConfigItemView *> setting_t;
+		typedef std::vector<ConfigItemView *> setting_t;
 		
 		class SettingsView : public BView {
 			public:

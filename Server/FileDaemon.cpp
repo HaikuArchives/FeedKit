@@ -178,8 +178,8 @@ void FileDaemon::DownloadStarted(FileRequest *request, void *data) {
 
 //#pragma mark Public
 
-status_t FileDaemon::AddRequest(FileRequest *request, int32 priority = 0, BMessenger *target = NULL,
-	BMessage *start = NULL, BMessage *finish = NULL, BMessage *error = NULL, BMessage *cancel = NULL) {
+status_t FileDaemon::AddRequest(FileRequest *request, int32 priority, BMessenger *target,
+	BMessage *start, BMessage *finish, BMessage *error, BMessage *cancel) {
 
 	RequestInfo *info = new RequestInfo(request, priority, target, start, finish, error, cancel);
 	request->AddHandler(this, info);

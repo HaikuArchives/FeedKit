@@ -1,0 +1,64 @@
+# CheckRules
+#
+# Common checks.
+
+rule CheckGccPlatform
+{
+	# CheckGccPlatform ;
+	# Detects if we are using gcc4 and set IS_GCC4_PLATFORM according.
+
+	# First find out which gcc version the platform uses.
+	IS_GCC4_PLATFORM = ;
+	if $(OS) = HAIKU {
+		# Only Haiku might use gcc 4. We use the existence of a libstdc++.r4.so in
+		# /boot/develop/lib/x86 to judge whether this is a BeOS compatible and thus
+		# gcc 2 platform. This is not entirely correct, but should be good enough
+		# for the time being.
+		local haveLibStdC++.R4 = [ Glob /boot/develop/lib/x86 : libstdc++.r4.so ] ;
+		if ! $(haveLibStdC++.R4) {
+			IS_GCC4_PLATFORM = 1 ;
+		}
+	}
+}
+
+rule CheckPCRE
+{
+	# CheckPCRE
+	# Detects if PCRE is available and defines HAVE_PCRE according.
+
+	local havePCRE = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/pcre : pcre.h ] ;
+	if ! $(havePCRE) {
+		havePCRE = [ Glob $(COMMON_INCLUDE_DIRECTORY)/pcre : pcre.h ] ;
+	}
+	if ! $(havePCRE) {
+		havePCRE = [ Glob $(COMMON_INCLUDE_DIRECTORY) : pcre.h ] ;
+	}
+
+	HAVE_PCRE = $(havePCRE) ;
+}
+
+rule CheckOpenSSL
+{
+	# CheckOpenSSL
+	# Detects if OpenSSL is available and defines HAVE_OPENSSL according.
+
+	local haveOpenSSL = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/openssl : sha.h ] ;
+	if ! $(haveOpenSSL) {
+		haveOpenSSL = [ Glob $(COMMON_INCLUDE_DIRECTORY)/openssl : sha.h ] ;
+	}
+
+	HAVE_OPENSSL = $(haveOpenSSL) ;
+}
+
+rule CheckCURL
+{
+	# CheckCURL
+	# Detects if CURL is available and defines HAVE_CURL according.
+
+	local haveCURL = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/curl : curl.h ] ;
+	if ! $(haveCURL) {
+		haveCURL = [ Glob $(COMMON_INCLUDE_DIRECTORY)/curl : curl.h ] ;
+	}
+
+	HAVE_CURL = $(haveCURL); ;
+}

@@ -14,8 +14,8 @@ namespace FeedKit {
 	class FeedParser;
 };
 
-typedef vector<BString> path_t;
-typedef map<image_id, FeedKit::FeedParser *> parser_t;
+typedef std::vector<BString> path_t;
+typedef std::map<image_id, FeedKit::FeedParser *> parser_t;
 
 class ParserManager {
 	public:

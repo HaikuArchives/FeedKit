@@ -1,12 +1,14 @@
 #ifndef LIBFEEDKIT_ITEMSPECIFICATION_H
 #define LIBFEEDKIT_ITEMSPECIFICATION_H
 
+#include <vector>
+
 #include <libfeedkit/Specification.h>
 
 namespace FeedKit {
 	class Item;
 
-	typedef vector<Item *> ItemList;
+	typedef std::vector<Item *> ItemList;
 	typedef Specification<Item *> ItemSpecification;
 
 	class UnreadItemSpecification : public ItemSpecification {

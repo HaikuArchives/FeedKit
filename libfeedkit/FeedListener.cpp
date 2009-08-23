@@ -29,9 +29,7 @@ using namespace FeedKit;
 
 //#pragma mark Constants
 
-extern "C" {
-	const char *FeedKit::ServerSignature = "application/x-vnd.beclan.feed_server";
-};
+const char *FeedKit::ServerSignature = "application/x-vnd.beclan.feed_server";
 
 const bigtime_t kTimeOut = 100 * 1000;
 
@@ -328,7 +326,7 @@ void FeedListener::StopListening(void) {
 	fListening = false;
 };
 
-status_t FeedListener::SendMessage(BMessage *msg, BMessage *reply = NULL) {
+status_t FeedListener::SendMessage(BMessage *msg, BMessage *reply) {
 	status_t status = B_ERROR;
 	
 	if (fMsgr.IsValid() == true) {
@@ -371,7 +369,7 @@ status_t FeedListener::MarkItemRead(Item *item) {
 	return SendMessage(&markRead);
 };
 
-status_t FeedListener::RegisterFeed(const char *url, const char *name = NULL) {
+status_t FeedListener::RegisterFeed(const char *url, const char *name) {
 	BMessage registerFeed(FeedKit::Private::ToServer::RegisterFeed);
 
 	registerFeed.AddString("url", url);

@@ -18,7 +18,7 @@ enum FileRequestStatus {
 
 class RequestHandlerInfo;
 
-typedef vector<RequestHandlerInfo *> handlerinfo_t;
+typedef std::vector<RequestHandlerInfo *> handlerinfo_t;
 
 class FileRequest {
 	public:

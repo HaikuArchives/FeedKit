@@ -11,9 +11,9 @@
 
 namespace FeedKit {
 	namespace Settings {
-		typedef vector<BString> vec_str_t;
-		typedef vector<int32> vec_int32_t;
-		typedef vector<entry_ref> vec_ref_t;
+		typedef std::vector<BString> vec_str_t;
+		typedef std::vector<int32> vec_int32_t;
+		typedef std::vector<entry_ref> vec_ref_t;
 		
 		class ConfigItemView : public BView {
 			public:

@@ -1,14 +1,14 @@
 #include "FeedServer.h"
 #include "FeedServerConstants.h"
 #include "Common/IMKitUtilities.h"
+#include "Common/SettingsFile.h"
+#include "Common/QueryLooper.h"
 #include "ParserManager.h"
 #include "EnclosureRequestHandler.h"
 #include "LocalEnclosureDownload.h"
 #include "FileDaemon.h"
 #include "FileRequest.h"
 #include "ObjectUpdateFilter.h"
-#include "SettingsFile.h"
-#include "QueryLooper.h"
 
 #include "libfeedkit/Private/Constants.h"
 
@@ -44,8 +44,8 @@ using namespace FeedKit::Settings;
 
 //#pragma mark Types
 
-typedef map<BString, Channel *> titlechannel_t;
-typedef map<BString, Channel *> channel_cache_t;
+typedef std::map<BString, Channel *> titlechannel_t;
+typedef std::map<BString, Channel *> channel_cache_t;
 
 //#pragma mark Constants
 

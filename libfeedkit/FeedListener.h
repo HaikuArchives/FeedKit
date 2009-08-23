@@ -12,7 +12,7 @@ namespace FeedKit {
 	class FeedHandler;
 };
 
-typedef vector<FeedKit::FeedHandler *> handler_t;
+typedef std::vector<FeedKit::FeedHandler *> handler_t;
 
 namespace FeedKit {
 	class Channel;

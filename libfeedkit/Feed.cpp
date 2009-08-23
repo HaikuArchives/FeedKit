@@ -17,7 +17,7 @@ const type_code kTypeCode = 'tfkf';
 
 //#pragma mark Constructor
 
-Feed::Feed(const char *url, const char *name = "")
+Feed::Feed(const char *url, const char *name)
 	: fURL(url),
 	fName(name),
 	fSubscribed(true),

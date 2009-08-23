@@ -1,0 +1,13 @@
+SubDir TOP ;
+
+# Include all the components
+SubInclude TOP Common ;
+SubInclude TOP libfeedkit ;
+SubInclude TOP Server ;
+#SubInclude TOP Parsers ;
+#SubInclude TOP Clients ;
+#SubInclude TOP Preflet ;
+#SubInclude TOP Tests ;
+
+Distro distro ;
+FullDistro fulldistro ;

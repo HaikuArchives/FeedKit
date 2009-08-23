@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "IMKitUtilities.h"
+#include "Common/IMKitUtilities.h"
 
 //#pragma mark Namespace import
 
@@ -25,16 +25,14 @@ const char *kSettingsDir = "Settings";
 const char *kTemplateDir = "Templates";
 const char *kDisplayAttr = "feedkit:displayname";
 
-extern "C" {
-	namespace FeedKit {
-		namespace Settings {
-			namespace AppTypes {
-				const char *SettingClient = "Client";
-				const char *SettingServer = "Server";
-				const char *SettingUtil = "Utility";
-				const char *SettingParser = "Parser";
-				const char *SettingFeed = "Feed";
-			};
+namespace FeedKit {
+	namespace Settings {
+		namespace AppTypes {
+			const char *SettingClient = "Client";
+			const char *SettingServer = "Server";
+			const char *SettingUtil = "Utility";
+			const char *SettingParser = "Parser";
+			const char *SettingFeed = "Feed";
 		};
 	};
 };
@@ -235,7 +233,7 @@ BMessage SettingsManager::Template(void) {
 	return tmplate;
 };
 
-status_t SettingsManager::Template(BMessage *tmplate, const char *appsig = NULL) {
+status_t SettingsManager::Template(BMessage *tmplate, const char *appsig) {
 	BPath path(fSettingsPath);
 	path.Append(fType.String());
 	path.Append(kTemplateDir);
@@ -258,7 +256,7 @@ status_t SettingsManager::Template(BMessage *tmplate, const char *appsig = NULL)
 	return result;
 };
 
-status_t SettingsManager::WatchSettings(uint32 flags = B_WATCH_STAT | B_WATCH_ATTR) {
+status_t SettingsManager::WatchSettings(uint32 flags) {
 	status_t result = B_ENTRY_NOT_FOUND;
 	BPath path(fSettingsPath);
 	path.Append(fType.String());

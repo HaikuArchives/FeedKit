@@ -3,8 +3,6 @@
 
 #include "ConfigItemView.h"
 
-#include <vector>
-
 class BButton;
 class BRefFilter;
 class BScrollView;

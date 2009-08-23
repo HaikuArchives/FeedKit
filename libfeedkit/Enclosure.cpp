@@ -58,7 +58,7 @@ Enclosure::Enclosure(const Enclosure * const rhs)
 	fLocalRef = rhs->fLocalRef;
 };
 
-Enclosure::Enclosure(const char *url, const char *mime = NULL, const char *description = NULL, int32 size = -1)
+Enclosure::Enclosure(const char *url, const char *mime, const char *description, int32 size)
 	: fURL(url),
 	fMIME(""),
 	fDescription(""),

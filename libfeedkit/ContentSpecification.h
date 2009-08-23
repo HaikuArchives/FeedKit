@@ -1,12 +1,14 @@
 #ifndef LIBFEEDKIT_CONTENTSPECIFICATION_H
 #define LIBFEEDKIT_CONTENTSPECIFICATION_H
 
+#include <vector>
+
 #include <libfeedkit/Specification.h>
 
 namespace FeedKit {
 	class Feed;
 	
-	typedef vector<Content *> ContentList;
+	typedef std::vector<Content *> ContentList;
 	typedef Specification<Content *> ContentSpecification;
 	
 	class AllContentSpecification : public ContentSpecification {

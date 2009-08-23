@@ -13,7 +13,7 @@ const type_code kTypeCode = 'tfkd';
 //#pragma mark Constructor
 
 DownloadProgress::DownloadProgress(const char *mime, time_t start, int32 size, int32 downloaded,
-	time_t end = 0)
+	time_t end)
 	: fMIME(mime),
 	fStart(start),
 	fEnd(end),

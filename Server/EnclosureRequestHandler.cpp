@@ -4,6 +4,9 @@
 #include <libfeedkit/DownloadProgress.h>
 #include <libfeedkit/Enclosure.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+
 //#pragma mark Namespace
 
 using namespace FeedKit;

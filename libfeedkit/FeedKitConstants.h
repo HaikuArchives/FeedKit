@@ -4,7 +4,6 @@
 #include <String.h>
 
 #include <vector>
-#include <map>
 
 namespace FeedKit {
 	class Channel;
@@ -15,13 +14,13 @@ namespace FeedKit {
 
 	extern const char *ServerSignature;
 	
-	typedef vector<BString> uuid_list_t;
+	typedef std::vector<BString> uuid_list_t;
 
-	typedef vector<Content *> content_list_t;
-	typedef vector<Channel *> channel_list_t;
-	typedef vector<Enclosure *> enclosure_list_t;
-	typedef vector<Feed *> feed_list_t;
-	typedef vector<Item *> item_list_t;
+	typedef std::vector<Content *> content_list_t;
+	typedef std::vector<Channel *> channel_list_t;
+	typedef std::vector<Enclosure *> enclosure_list_t;
+	typedef std::vector<Feed *> feed_list_t;
+	typedef std::vector<Item *> item_list_t;
 
 	namespace FromServer {
 		enum msg_what {

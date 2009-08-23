@@ -72,7 +72,11 @@
 #include <string.h>
 
 #ifndef _PCRE_H
-#include <pcre/pcre.h>
+#	ifdef __HAIKU__
+#		include <pcre.h>
+#	else
+#		include <pcre/pcre.h>
+#	endif
 #endif
 
 class RegEx

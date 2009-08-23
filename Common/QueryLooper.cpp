@@ -16,7 +16,7 @@ const int32 msgInitialFetch = 'ql01';
 //#pragma mark Constructor
 
 QueryLooper::QueryLooper(const char *predicate, volume_t vols,
-	const char *name = NULL, BHandler *notify = NULL, BMessage *msg = NULL)
+	const char *name, BHandler *notify, BMessage *msg)
 	: BLooper(name),
 		fMsg(NULL) {
 	

@@ -33,9 +33,11 @@
 
 #include <vector>
 
+#include <assert.h>
+
 //#pragma mark Types
 
-typedef vector<BPoint> circle_t;
+typedef std::vector<BPoint> circle_t;
 
 //#pragma mark Constants
 
@@ -303,7 +305,7 @@ void ResizeView::AttachedToWindow(void) {
 };
 
 //#pragma BArchivable Hooks
-status_t ResizeView::Archive(BMessage *archive, bool deep = true) const {
+status_t ResizeView::Archive(BMessage *archive, bool deep) const {
 	status_t result = B_ERROR;
 	
 	archive->AddInt32("resize_mode", fResizeMode);

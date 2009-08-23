@@ -11,7 +11,7 @@ const int32 kLargeIcon = 32;
 
 // Loads the icon. Callers responsibility to free BBitmap
 
-BBitmap *ReadNodeIcon(const char *name, int32 size = kSmallIcon, bool followSymlink = true) {
+BBitmap *ReadNodeIcon(const char *name, int32 size, bool followSymlink) {
 	BBitmap *ret = NULL;
 
 #if B_BEOS_VERSION > B_BEOS_VERSION_5
@@ -60,7 +60,7 @@ BBitmap *ReadNodeIcon(const char *name, int32 size = kSmallIcon, bool followSyml
 //  responsibility to delete it) on success, NULL on failure. 
 
 BBitmap *GetBitmapFromAttribute(const char *name, const char *attribute, 
-	type_code type = 'BBMP', bool followSymlink = true) {
+	type_code type, bool followSymlink) {
 
 	BEntry entry(name, followSymlink);
 	entry_ref ref;
@@ -86,10 +86,10 @@ BBitmap *GetBitmapFromAttribute(const char *name, const char *attribute,
 		return NULL;
 	};
 		
-	char *data = (char *)calloc(info.size, sizeof(char));
+	char *data = (char *)calloc((size_t)info.size, sizeof(char));
 	len = (size_t)info.size;
 		
-	if (node.ReadAttr(attribute, type, 0, data, len) != len) {
+	if (node.ReadAttr(attribute, type, 0, data, len) != (size_t)len) {
 		node.Unset();
 		free(data);
 	
@@ -99,7 +99,7 @@ BBitmap *GetBitmapFromAttribute(const char *name, const char *attribute,
 //	Icon is a square, so it's right / bottom co-ords are the root of the bitmap length
 //	Offset is 0
 	BRect bound = BRect(0, 0, 0, 0);
-	bound.right = sqrt(len) - 1;
+	bound.right = (float)sqrt(len) - 1;
 	bound.bottom = bound.right;
 	
 	bitmap = new BBitmap(bound, B_COLOR_8_BIT);
@@ -118,19 +118,19 @@ BBitmap *GetBitmapFromAttribute(const char *name, const char *attribute,
 // Reads attribute from node. Returns contents (to be free()'d by user) or NULL on
 // fail
 
-char *ReadAttribute(BNode node, const char *attribute, int32 *length = NULL) {
+char *ReadAttribute(BNode node, const char *attribute, int32 *length) {
 	attr_info info;
 	char *value = NULL;
 
 	if (node.GetAttrInfo(attribute, &info) == B_OK) {
-		value = (char *)calloc(info.size, sizeof(char));
-		if (node.ReadAttr(attribute, info.type, 0, (void *)value, info.size) !=
-			info.size) {
+		value = (char *)calloc((size_t)info.size, sizeof(char));
+		if (node.ReadAttr(attribute, info.type, 0, (void *)value, (size_t)info.size) !=
+			(size_t)info.size) {
 			
 			free(value);
 			value = NULL;
 		};
-		if (length) *length = info.size;
+		if (length) *length = (size_t)info.size;
 	};
 
 	return value;
