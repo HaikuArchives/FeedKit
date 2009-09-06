@@ -10,7 +10,7 @@
 #include "FileRequest.h"
 #include "ObjectUpdateFilter.h"
 
-#include "libfeedkit/Private/Constants.h"
+#include <libfeedkit/Private/Constants.h>
 
 #include <Debug.h>
 
@@ -122,25 +122,25 @@ FeedServer::FeedServer(void)
 	fHandler[kMsgFeedDownloadStart] = &FeedServer::HandleFeedDownloadStart;
 	fHandler[kMsgFeedDownloadError] = &FeedServer::HandleFeedDownloadError;
 	fHandler[kMsgFeedDownloadFinish] = &FeedServer::HandleFeedDownloadFinish;
-	fHandler[Private::ToServer::ForceRefresh] = &FeedServer::HandleForceRefresh;
-	fHandler[Private::ToServer::MarkRead] = &FeedServer::HandleMarkRead;
-	fHandler[Private::ToServer::DownloadEnclosure] = &FeedServer::HandleDownloadEnclosure;
-	fHandler[Private::ToServer::CancelEnclosureDownload] = &FeedServer::HandleCancelEnclosureDownload;
+	fHandler[FeedKit::Private::ToServer::ForceRefresh] = &FeedServer::HandleForceRefresh;
+	fHandler[FeedKit::Private::ToServer::MarkRead] = &FeedServer::HandleMarkRead;
+	fHandler[FeedKit::Private::ToServer::DownloadEnclosure] = &FeedServer::HandleDownloadEnclosure;
+	fHandler[FeedKit::Private::ToServer::CancelEnclosureDownload] = &FeedServer::HandleCancelEnclosureDownload;
 	fHandler[kMsgEnclosureDownloadCancelled] = &FeedServer::HandleEnclosureDownloadCancelled;
 	fHandler[kMsgEnclosureDownloadStart] = &FeedServer::HandleEnclosureDownloadStart;
 	fHandler[kMsgEnclosureDownloadFinish] = &FeedServer::HandleEnclosureDownloadFinish;
 	fHandler[kMsgEnclosureDownloadError] = &FeedServer::HandleEnclosureDownloadError;
-	fHandler[Private::ToServer::RegisterFeed] = &FeedServer::HandleRegisterFeed;
-	fHandler[Private::ToServer::GetFeedList] = &FeedServer::HandleGetFeedList;
-	fHandler[Private::ToServer::GetChannelIconPath] = &FeedServer::HandleGetChannelIconPath;
-	fHandler[Private::AddListener] = &FeedServer::HandleAddListener;
-	fHandler[Private::RemoveListener] = &FeedServer::HandleRemoveListener;
-	fHandler[Private::SettingsTemplateUpdated] = &FeedServer::HandleSettingsTemplateUpdated;
+	fHandler[FeedKit::Private::ToServer::RegisterFeed] = &FeedServer::HandleRegisterFeed;
+	fHandler[FeedKit::Private::ToServer::GetFeedList] = &FeedServer::HandleGetFeedList;
+	fHandler[FeedKit::Private::ToServer::GetChannelIconPath] = &FeedServer::HandleGetChannelIconPath;
+	fHandler[FeedKit::Private::AddListener] = &FeedServer::HandleAddListener;
+	fHandler[FeedKit::Private::RemoveListener] = &FeedServer::HandleRemoveListener;
+	fHandler[FeedKit::Private::SettingsTemplateUpdated] = &FeedServer::HandleSettingsTemplateUpdated;
 	fHandler[B_NODE_MONITOR] = &FeedServer::HandleNodeMonitor;
 	fHandler[kMsgChannelIconDownloadStart] = &FeedServer::HandleChannelIconDownloadStart;
 	fHandler[kMsgChannelIconDownloadFinish] = &FeedServer::HandleChannelIconDownloadFinish;
 	fHandler[kMsgChannelIconDownloadError] = &FeedServer::HandleChannelIconDownloadError;
-	fHandler[Private::ToServer::ChangeFeedSubscription] = &FeedServer::HandleChangeFeedSubscription;
+	fHandler[FeedKit::Private::ToServer::ChangeFeedSubscription] = &FeedServer::HandleChangeFeedSubscription;
 	fHandler[kMsgFlattenFeeds] = &FeedServer::HandleFlattenFeeds;
 
 	fRefFeedUUID.clear();
@@ -455,7 +455,7 @@ status_t FeedServer::SyndicateURL(const char *url, const char *name = "") {
 	refresh_t::iterator rIt = fRefreshRunners.find(url);
 	if (rIt == fRefreshRunners.end()) {
 		// Set the feed up to be refreshed
-		BMessage refreshMsg(Private::ToServer::ForceRefresh);
+		BMessage refreshMsg(FeedKit::Private::ToServer::ForceRefresh);
 		refreshMsg.AddString("url", url);
 		BMessageRunner *refresh = new BMessageRunner(BMessenger(this), &refreshMsg,
 			kDefaultRefresh);
@@ -467,7 +467,7 @@ status_t FeedServer::SyndicateURL(const char *url, const char *name = "") {
 	urlfeed_t::iterator uIt = fURLFeeds.find(url);
 	
 	if (uIt != fURLFeeds.end()) {
-		progress.what = Private::FromServer::DownloadFeedProgress;
+		progress.what = FeedKit::Private::FromServer::DownloadFeedProgress;
 		progress.AddFlat("feed", uIt->second);
 	};
 
@@ -896,7 +896,7 @@ status_t FeedServer::DownloadEnclosure(FeedKit::Feed *feed, FeedKit::Channel *ch
 	FeedKit::Item *item, Enclosure *enclosure, entry_ref ref, int32 offset = 0) {
 
 	DelayedFlattenedObject progressUpdateCommand("feed", feed);
-	BMessage progress(Private::FromServer::DownloadEnclosureProgress);
+	BMessage progress(FeedKit::Private::FromServer::DownloadEnclosureProgress);
 	progress.AddFlat("delayedupdate", &progressUpdateCommand);
 	progress.AddString("channel", channel->UUID());
 	progress.AddString("item", item->UUID());
@@ -939,7 +939,7 @@ status_t FeedServer::DownloadEnclosure(FeedKit::Feed *feed, FeedKit::Channel *ch
 
 //		XXX		
 //		ErrorDetails error(ErrorCode::UnableToStartDownload, "Error starting the download");
-//		BMessage reply(Private::FromServer::DownloadEnclosureError);
+//		BMessage reply(FeedKit::Private::FromServer::DownloadEnclosureError);
 //		reply.AddFlat("error", &error);		
 //		msg->SendReply(&reply);
 	
@@ -1145,7 +1145,7 @@ status_t FeedServer::HandleFeedDownloadStart(BMessage *msg) {
 
 	DownloadProgress *progress = ProgressFromRequest(request);		
 
-	BMessage startNotify(Private::FromServer::DownloadFeedStarted);
+	BMessage startNotify(FeedKit::Private::FromServer::DownloadFeedStarted);
 	startNotify.AddFlat("download", progress);
 	startNotify.AddFlat("feed", uIt->second);
 	
@@ -1163,7 +1163,7 @@ status_t FeedServer::HandleFeedDownloadError(BMessage *msg) {
 
 	DownloadProgress *progress = ProgressFromRequest(request);
 
-	BMessage startNotify(Private::FromServer::DownloadFeedError);
+	BMessage startNotify(FeedKit::Private::FromServer::DownloadFeedError);
 	startNotify.AddFlat("download", progress);
 	startNotify.AddFlat("feed", uIt->second);
 	
@@ -1187,7 +1187,7 @@ status_t FeedServer::HandleFeedDownloadFinish(BMessage *msg) {
 		fprintf(stderr, "File not downloaded successfully\n");
 		delete progress;
 		
-		BMessage errorNotify(Private::FromServer::DownloadFeedError);
+		BMessage errorNotify(FeedKit::Private::FromServer::DownloadFeedError);
 		errorNotify.AddFlat("download", progress);
 		Broadcast(&errorNotify);
 		
@@ -1202,7 +1202,7 @@ status_t FeedServer::HandleFeedDownloadFinish(BMessage *msg) {
 		notifyFeed = *(uIt->second);
 	};
 
-	BMessage finishNotify(Private::FromServer::DownloadFeedFinished);
+	BMessage finishNotify(FeedKit::Private::FromServer::DownloadFeedFinished);
 	finishNotify.AddFlat("download", progress);
 	finishNotify.AddFlat("feed", &notifyFeed);
 	Broadcast(&finishNotify);
@@ -1217,7 +1217,7 @@ status_t FeedServer::HandleFeedDownloadFinish(BMessage *msg) {
 	free(buffer);
 	
 	if (refreshed == NULL) {
-		BMessage errorMsg(Private::FromServer::RegisterFeedError);
+		BMessage errorMsg(FeedKit::Private::FromServer::RegisterFeedError);
 
 		ErrorDetails error(ErrorCode::UnableToParseFeed, "Unable to parse feed");
 		Feed feed(url, name);
@@ -1275,7 +1275,7 @@ status_t FeedServer::HandleFeedDownloadFinish(BMessage *msg) {
 	
 	fURLFeeds[feed->URL()] = feed;
 
-	BMessage refreshMsg(Private::ToServer::ForceRefresh);
+	BMessage refreshMsg(FeedKit::Private::ToServer::ForceRefresh);
 	refreshMsg.AddString("url", url);
 				
 	BMessageRunner *refresh = new BMessageRunner(BMessenger(this), &refreshMsg,	interval);
@@ -1346,7 +1346,7 @@ status_t FeedServer::HandleFeedDownloadFinish(BMessage *msg) {
 		fRefFeedUUID[feed->UUID()] = ref;
 
 		// New feed, send a "Subscribe Complete"
-		BMessage subscribed(Private::FromServer::RegisterFeedComplete);
+		BMessage subscribed(FeedKit::Private::FromServer::RegisterFeedComplete);
 		subscribed.AddFlat("feed", feed);		
 		Broadcast(&subscribed);
 	} else {
@@ -1355,7 +1355,7 @@ status_t FeedServer::HandleFeedDownloadFinish(BMessage *msg) {
 			ItemList newItems = channel->FindItems(new NewItemSpecification(), true);
 			
 			if (newItems.size() > 0) {
-				BMessage updated(Private::FromServer::ChannelUpdated);
+				BMessage updated(FeedKit::Private::FromServer::ChannelUpdated);
 				updated.AddFlat("feed", feed);
 				updated.AddString("channel", channel->UUID());
 			
@@ -1395,7 +1395,7 @@ status_t FeedServer::HandleMarkRead(BMessage *msg) {
 		
 		item->SetRead(true);
 		
-		BMessage itemRead(Private::FromServer::ItemRead);
+		BMessage itemRead(FeedKit::Private::FromServer::ItemRead);
 		itemRead.AddFlat("feed", feed);
 		itemRead.AddString("channel", channel->UUID());
 		itemRead.AddString("item", item->UUID());
@@ -1414,7 +1414,7 @@ status_t FeedServer::HandleDownloadEnclosure(BMessage *msg) {
 	
 	if (msg->FindString("item", &itemUUID) != B_OK) {
 		ErrorDetails error(ErrorCode::InvalidItem, "No Item was specified");
-		BMessage reply(Private::FromServer::DownloadEnclosureError);
+		BMessage reply(FeedKit::Private::FromServer::DownloadEnclosureError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1424,7 +1424,7 @@ status_t FeedServer::HandleDownloadEnclosure(BMessage *msg) {
 	
 	if (msg->FindFlat("enclosure", &enc) != B_OK) {
 		ErrorDetails error(ErrorCode::InvalidEnclosure, "No Enclosure was specified");
-		BMessage reply(Private::FromServer::DownloadEnclosureError);
+		BMessage reply(FeedKit::Private::FromServer::DownloadEnclosureError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1435,7 +1435,7 @@ status_t FeedServer::HandleDownloadEnclosure(BMessage *msg) {
 	item_uuid_t::iterator iIt = fItemUUID.find(itemUUID);
 	if (iIt == fItemUUID.end()) {
 		ErrorDetails error(ErrorCode::InvalidItem, "Could not find specified Item");
-		BMessage reply(Private::FromServer::DownloadEnclosureError);
+		BMessage reply(FeedKit::Private::FromServer::DownloadEnclosureError);
 		reply.AddFlat("error", &error);
 	
 		msg->SendReply(&reply);
@@ -1449,7 +1449,7 @@ status_t FeedServer::HandleDownloadEnclosure(BMessage *msg) {
 				
 	if (msg->FindString("path", &path) != B_OK) {
 		ErrorDetails error(ErrorCode::InvalidEnclosurePath, "No path specified");
-		BMessage reply(Private::FromServer::DownloadEnclosureError);
+		BMessage reply(FeedKit::Private::FromServer::DownloadEnclosureError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1464,7 +1464,7 @@ status_t FeedServer::HandleDownloadEnclosure(BMessage *msg) {
 		desc << strerror(result);
 		
 		ErrorDetails error(ErrorCode::InvalidEnclosurePath, desc.String());
-		BMessage reply(Private::FromServer::DownloadEnclosureError);
+		BMessage reply(FeedKit::Private::FromServer::DownloadEnclosureError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1486,7 +1486,7 @@ status_t FeedServer::HandleDownloadEnclosure(BMessage *msg) {
 		existing = LocalEnclosureDownload(ref);
 
 		if (existing.Complete() == true) {
-			BMessage complete(Private::FromServer::DownloadEnclosureFinished);
+			BMessage complete(FeedKit::Private::FromServer::DownloadEnclosureFinished);
 			complete.AddFlat("feed", feed);
 			complete.AddString("channel", channel->UUID());
 			complete.AddString("item", item->UUID());
@@ -1512,7 +1512,7 @@ status_t FeedServer::HandleCancelEnclosureDownload(BMessage *msg) {
 	
 	if (msg->FindString("item", &itemUUID) != B_OK) {
 		ErrorDetails error(ErrorCode::InvalidItem, "No Item was specified");
-		BMessage reply(Private::FromServer::CancelEnclosureDownloadError);
+		BMessage reply(FeedKit::Private::FromServer::CancelEnclosureDownloadError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1522,7 +1522,7 @@ status_t FeedServer::HandleCancelEnclosureDownload(BMessage *msg) {
 	
 	if (msg->FindFlat("enclosure", &enc) != B_OK) {
 		ErrorDetails error(ErrorCode::InvalidEnclosure, "No Enclosure was specified");
-		BMessage reply(Private::FromServer::CancelEnclosureDownloadError);
+		BMessage reply(FeedKit::Private::FromServer::CancelEnclosureDownloadError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1533,7 +1533,7 @@ status_t FeedServer::HandleCancelEnclosureDownload(BMessage *msg) {
 	item_uuid_t::iterator iIt = fItemUUID.find(itemUUID);
 	if (iIt == fItemUUID.end()) {
 		ErrorDetails error(ErrorCode::InvalidItem, "Could not find specified Item");
-		BMessage reply(Private::FromServer::CancelEnclosureDownloadError);
+		BMessage reply(FeedKit::Private::FromServer::CancelEnclosureDownloadError);
 		reply.AddFlat("error", &error);
 	
 		msg->SendReply(&reply);
@@ -1543,7 +1543,7 @@ status_t FeedServer::HandleCancelEnclosureDownload(BMessage *msg) {
 
 	if (fFeedDaemon->CancelDownload(enc.URL()) != B_OK) {
 		ErrorDetails error(ErrorCode::InvalidEnclosure, "Could not find Enclosure to download");
-		BMessage reply(Private::FromServer::CancelEnclosureDownloadError);
+		BMessage reply(FeedKit::Private::FromServer::CancelEnclosureDownloadError);
 		reply.AddFlat("error", &error);
 		
 		msg->SendReply(&reply);
@@ -1592,7 +1592,7 @@ status_t FeedServer::HandleEnclosureDownloadStart(BMessage *msg) {
 
 	enclosure.SetState(Downloading);
 
-	BMessage startNotify(Private::FromServer::DownloadEnclosureStarted);
+	BMessage startNotify(FeedKit::Private::FromServer::DownloadEnclosureStarted);
 	startNotify.AddFlat("feed", feed);
 	startNotify.AddString("channel", channel->UUID());
 	startNotify.AddString("item", item->UUID());
@@ -1633,7 +1633,7 @@ status_t FeedServer::HandleEnclosureDownloadFinish(BMessage *msg) {
 		node.Unset();
 	};
 
-	BMessage notify(Private::FromServer::DownloadEnclosureFinished);
+	BMessage notify(FeedKit::Private::FromServer::DownloadEnclosureFinished);
 	notify.AddFlat("feed", feed);
 	notify.AddString("channel", chanUUID);
 	notify.AddString("item", itemUUID);
@@ -1676,7 +1676,7 @@ msg->PrintToStream();
 
 	enc->SetState(Cancelled);
 
-	BMessage notify(Private::FromServer::EnclosureDownloadStatusChanged);
+	BMessage notify(FeedKit::Private::FromServer::EnclosureDownloadStatusChanged);
 	notify.AddFlat("feed", feed);
 	notify.AddString("channel", chanUUID);
 	notify.AddString("item", itemUUID);
@@ -1700,7 +1700,7 @@ status_t FeedServer::HandleRegisterFeed(BMessage *msg) {
 };
 
 status_t FeedServer::HandleGetFeedList(BMessage *msg) {
-	BMessage feeds(Private::ServerReply::FeedList);
+	BMessage feeds(FeedKit::Private::ServerReply::FeedList);
 	
 	feed_uuid_t::iterator uIt;
 	for (uIt = fFeedUUID.begin(); uIt != fFeedUUID.end(); uIt++) {
@@ -1717,16 +1717,16 @@ status_t FeedServer::HandleGetChannelIconPath(BMessage *msg) {
 	const char *uuid = NULL;
 	
 	if (msg->FindString("channel", &uuid) != B_OK) {
-		reply.what = Private::ServerReply::Error;
+		reply.what = FeedKit::Private::ServerReply::Error;
 		reply.AddString("description", "No Channel was provided");
 	} else {
 		channel_icon_t::iterator cIt = fChannelIcon.find(uuid);
 		
 		if (cIt == fChannelIcon.end()) {
-			reply.what = Private::ServerReply::Error;
+			reply.what = FeedKit::Private::ServerReply::Error;
 			reply.AddString("description", "Channel icon has not been downloaded yet");					
 		} else {
-			reply.what = Private::FromServer::ChannelIconPath;
+			reply.what = FeedKit::Private::FromServer::ChannelIconPath;
 			reply.AddString("path", cIt->second);
 		};
 	};
@@ -1742,7 +1742,7 @@ status_t FeedServer::HandleAddListener(BMessage *msg) {
 	
 	AddListener(msgr);
 	
-	msg->SendReply(Private::Success);
+	msg->SendReply(FeedKit::Private::Success);
 
 	return B_OK;
 };
@@ -1753,7 +1753,7 @@ status_t FeedServer::HandleRemoveListener(BMessage *msg) {
 	
 	RemoveListener(msgr);
 	
-	msg->SendReply(Private::Success);
+	msg->SendReply(FeedKit::Private::Success);
 
 	return B_OK;
 };
@@ -1803,7 +1803,7 @@ status_t FeedServer::HandleChannelIconDownloadFinish(BMessage *msg) {
 	if (msg->FindPointer("channel", reinterpret_cast<void **>(&channel)) != B_OK) return B_ERROR;
 	
 	entry_ref ref = request->Ref();
-	BMessage iconUpdated(Private::FromServer::ChannelIconUpdated);
+	BMessage iconUpdated(FeedKit::Private::FromServer::ChannelIconUpdated);
 	iconUpdated.AddFlat("feed", channel->ParentFeed());
 	iconUpdated.AddString("channel", channel->UUID());
 	iconUpdated.AddRef("ref", &ref);
@@ -1825,7 +1825,7 @@ status_t FeedServer::HandleChangeFeedSubscription(BMessage *msg) {
 	
 	if (msg->FindString("uuid", &uuid) != B_OK) {
 		BMessage reply(B_REPLY);
-		reply.what = Private::ServerReply::Error;
+		reply.what = FeedKit::Private::ServerReply::Error;
 		reply.AddString("description", "No Feed was provided");
 
 		msg->SendReply(&reply);
@@ -1837,7 +1837,7 @@ status_t FeedServer::HandleChangeFeedSubscription(BMessage *msg) {
 	feed = GetFeed(uuid);
 	if (feed == NULL) {
 		BMessage reply(B_REPLY);
-		reply.what = Private::ServerReply::Error;
+		reply.what = FeedKit::Private::ServerReply::Error;
 		reply.AddString("description", "Feed could not be found");
 
 		msg->SendReply(&reply);
@@ -1849,7 +1849,7 @@ status_t FeedServer::HandleChangeFeedSubscription(BMessage *msg) {
 	
 	fprintf(stderr, "FeedServer::HandleChangeFeedSubscription: %s is now %ssubscribed\n", feed->DisplayName(), subscribed ? "" : "un");
 	
-	BMessage feedSubscribed(Private::FromServer::FeedSubscriptionChanged);
+	BMessage feedSubscribed(FeedKit::Private::FromServer::FeedSubscriptionChanged);
 	feedSubscribed.AddFlat("feed", feed);
 	Broadcast(&feedSubscribed);
 	
