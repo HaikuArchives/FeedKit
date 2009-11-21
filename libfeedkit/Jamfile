@@ -1,0 +1,58 @@
+SubDir TOP libfeedkit ;
+
+SubDirSysHdrs [ FDirName $(TOP) ] ;
+SubDirSysHdrs [ FDirName $(PCRE_INCLUDE_DIR) ] ;
+SubDirSysHdrs [ FDirName $(OPENSSL_INCLUDE_DIR) ] ;
+
+SEARCH_SOURCE += [ FDirName $(TOP) libfeedkit ConfigItemViews ] ;
+C++FLAGS += -fpermissive ;
+
+SharedLibrary libfeedkit.so :
+	BubbleHelper.cpp
+	Channel.cpp
+	ConfigItemView.cpp
+	Content.cpp
+	DownloadProgress.cpp
+	Enclosure.cpp
+	ErrorDetails.cpp
+	Item.cpp
+	Feed.cpp
+	FeedListener.cpp
+	FeedHandler.cpp
+	FeedParser.cpp
+	ObjectCache.cpp
+	SettingsManager.cpp
+	SettingsView.cpp
+	TraceFeedHandler.cpp
+	ItemSpecification.cpp
+
+	# ConfigItemViews
+	FilePickerView.cpp
+	MenuItemView.cpp
+	MultiTextItemView.cpp
+	TextItemView.cpp
+	: be $(TARGET_LIBSTDC++) pcre crypto tracker libcommon.a
+	: libfeedkit_version.rdef
+;
+
+Depends libfeedkit.so : libcommon.a ;
+
+if $(OS) = ZETA {
+	LINKFLAGS on libfeedkit.so += -lzeta ;
+}
+
+InstallLib $(COMMON_LIB_DIRECTORY) : libfeedkit.so ;
+InstallFile $(COMMON_INC_DIRECTORY)/libim : Constants.h ;
+InstallFile $(COMMON_INC_DIRECTORY)/libim : Contact.h ;
+InstallFile $(COMMON_INC_DIRECTORY)/libim : Helpers.h ;
+InstallFile $(COMMON_INC_DIRECTORY)/libim : Manager.h ;
+InstallFile $(COMMON_INC_DIRECTORY)/libim : Protocol.h ;
+
+Package feedkit :
+	libfeedkit.so :
+	[ FSplitPath $(COMMON_LIB_DIRECTORY) ]
+;
+Package feedkit :
+	Constants.h Contact.h Helpers.h Manager.h Protocol.h :
+	[ FSplitPath $(IMKIT_COMMON_INC_DIRECTORY) ]
+;

@@ -1,0 +1,14 @@
+SubDir TOP Common ;
+
+StaticLibrary libcommon.a :
+	IMKitUtilities.cpp
+	IconMenu.cpp
+	IconTextItem.cpp
+	QueryLooper.cpp
+	ResizeView.cpp
+	SettingsFile.cpp
+;
+
+if $(IMKIT_IS_ZETA) = 1 {
+	LINKFLAGS on libcommon.a += -lzeta -ltracker ;
+}

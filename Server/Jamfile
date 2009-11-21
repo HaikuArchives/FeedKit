@@ -1,0 +1,39 @@
+SubDir TOP Server ;
+
+SubDirSysHdrs [ FDirName $(TOP) ] ;
+
+C++FLAGS += -fpermissive ;
+
+Application feed_server :
+	Main.cpp
+	EnclosureRequestHandler.cpp
+	LocalEnclosureDownload.cpp
+	FileDaemon.cpp
+	FileRequest.cpp
+	ParserManager.cpp
+	FeedServer.cpp
+	ObjectUpdateFilter.cpp
+	: be $(TARGET_LIBSTDC++) translation z curl feedkit common
+	: feed_server.rsrc
+;
+
+Depends feed_server : libcommon.a ;
+Depends feed_server : libfeedkit.so ;
+
+if $(PLATFORM) = Haiku {
+	LINKFLAGS on += -lnetwork ;
+}
+if $(PLATFORM) = Zeta {
+	LINKFLAGS on += -lsocket -lbind -lzeta -ltracker ;
+}
+
+InstallBin $(COMMON_SERVERS_DIRECTORY) : feed_server ;
+
+#if $(IMKIT_IS_ZETA) = 1 {
+#	SVGIcon im_server : [ FDirName $(TOP) icons imkit im_server.svg ] ;
+#}
+
+Package feedkit :
+	feed_server :
+	[ FSplitPath $(COMMON_SERVERS_DIRECTORY) ]
+;

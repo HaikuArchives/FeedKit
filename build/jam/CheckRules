@@ -17,37 +17,108 @@ rule CheckGccPlatform
 		local haveLibStdC++.R4 = [ Glob /boot/develop/lib/x86 : libstdc++.r4.so ] ;
 		if ! $(haveLibStdC++.R4) {
 			IS_GCC4_PLATFORM = 1 ;
+			Echo Using GCC4 platform ;
 		}
 	}
 }
 
 rule CheckPCRE
 {
-	# CheckPCRE
-	# Detects if PCRE is available and defines HAVE_PCRE according.
+	# CheckPCRE ;
+	# Check for PCRE and defined HAVE_PCRE according, it also defines
+	# PCRE_INCLUDE_DIR and PCRE_LIBRARY_DIR with location of respectively
+	# include and library files.
 
-	local havePCRE = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/pcre : pcre.h ] ;
-	if ! $(havePCRE) {
-		havePCRE = [ Glob $(COMMON_INCLUDE_DIRECTORY)/pcre : pcre.h ] ;
-	}
-	if ! $(havePCRE) {
-		havePCRE = [ Glob $(COMMON_INCLUDE_DIRECTORY) : pcre.h ] ;
+	HAVE_PCRE = ;
+	PCRE_INCLUDE_DIR = ;
+	PCRE_LIBRARY_DIR = ;
+
+	local haveHeaders = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/pcre : pcre.h ] ;
+	if $(haveHeaders) {
+		PCRE_INCLUDE_DIR = $(COMMON_DEVELOP_DIRECTORY)/headers/pcre ;
+	} else {
+		haveHeaders = [ Glob $(COMMON_INCLUDE_DIRECTORY)/pcre : ssl.h ] ;
+		if $(haveHeaders) {
+			PCRE_INCLUDE_DIR = $(COMMON_INCLUDE_DIRECTORY)/pcre ;
+		} else {
+			haveHeaders = [ Glob $(COMMON_INCLUDE_DIRECTORY) : pcre.h ] ;
+			if $(haveHeaders) {
+				PCRE_INCLUDE_DIR = $(COMMON_INCLUDE_DIRECTORY) ;
+			}
+		}
 	}
 
-	HAVE_PCRE = $(havePCRE) ;
+	if $(haveHeaders) {
+		local haveLibs = [ Glob $(COMMON_LIB_DIRECTORY) : libpcre.so ] ;
+		if $(haveLibs) {
+			PCRE_LIBRARY_DIR = $(COMMON_LIB_DIRECTORY) ;
+		} else {
+			haveLibs = [ Glob $(COMMON_DEVELOP_DIRECTORY)/lib/x86 : libpcre.so ] ;
+			if $(haveLibs) {
+				PCRE_LIBRARY_DIR = $(COMMON_DEVELOP_DIRECTORY)/lib/x86 ;
+			} else {
+				haveLibs = [ Glob $(BEOS_SYSTEM_DIRECTORY)/lib : libpcre.so ] ;
+				if $(haveLibs) {
+					PCRE_LIBRARY_DIR = $(BEOS_SYSTEM_DIRECTORY)/lib ;
+				}
+			}
+		}
+
+		HAVE_PCRE = $(haveLibs) ;
+	}
+	if ($(PCRE_INCLUDE_DIR) {
+		Echo PCRE Headers: $(PCRE_INCLUDE_DIR) ;
+	}
+	if $(PCRE_LIBRARY_DIR) {
+		Echo PCRE Libs: $(PCRE_LIBRARY_DIR) ;
+	}
 }
 
 rule CheckOpenSSL
 {
-	# CheckOpenSSL
-	# Detects if OpenSSL is available and defines HAVE_OPENSSL according.
+	# CheckOpenSSL ;
+	# Check for OpenSSL and defined HAVE_OPENSSL according, it also defines
+	# OPENSSL_INCLUDE_DIR and OPENSSL_LIBRARY_DIR with location of respectively
+	# include and library files.
 
-	local haveOpenSSL = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/openssl : sha.h ] ;
-	if ! $(haveOpenSSL) {
-		haveOpenSSL = [ Glob $(COMMON_INCLUDE_DIRECTORY)/openssl : sha.h ] ;
+	HAVE_OPENSSL = ;
+	OPENSSL_INCLUDE_DIR = ;
+	OPENSSL_LIBRARY_DIR = ;
+
+	local haveHeaders = [ Glob $(COMMON_INCLUDE_DIRECTORY)/openssl : ssl.h ] ;
+	if $(haveHeaders) {
+		OPENSSL_INCLUDE_DIR = $(COMMON_INCLUDE_DIRECTORY)/openssl ;
+	} else {
+		haveHeaders = [ Glob $(COMMON_DEVELOP_DIRECTORY)/headers/openssl : ssl.h ] ;
+		if $(haveHeaders) {
+			OPENSSL_INCLUDE_DIR = $(COMMON_DEVELOP_DIRECTORY)/headers/openssl ;
+		}
 	}
 
-	HAVE_OPENSSL = $(haveOpenSSL) ;
+	if $(haveHeaders) {
+		local haveLibs = [ Glob $(COMMON_LIB_DIRECTORY) : libssl.so ] ;
+		if $(haveLibs) {
+			OPENSSL_LIBRARY_DIR = $(COMMON_LIB_DIRECTORY) ;
+		} else {
+			haveLibs = [ Glob $(COMMON_DEVELOP_DIRECTORY)/lib/x86 : libssl.so ] ;
+			if $(haveLibs) {
+				OPENSSL_LIBRARY_DIR = $(COMMON_DEVELOP_DIRECTORY)/lib/x86 ;
+			} else {
+				haveLibs = [ Glob $(BEOS_SYSTEM_DIRECTORY)/lib : libssl.so ] ;
+				if $(haveLibs) {
+					OPENSSL_LIBRARY_DIR = $(BEOS_SYSTEM_DIRECTORY)/lib ;
+				}
+			}
+		}
+
+		HAVE_OPENSSL = $(haveLibs) ;
+	}
+	if ($(OPENSSL_INCLUDE_DIR) {
+		Echo OpenSSL Headers: $(OPENSSL_INCLUDE_DIR) ;
+	}
+	if $(OPENSSL_LIBRARY_DIR) {
+		Echo OpenSSL Libs: $(OPENSSL_LIBRARY_DIR) ;
+	}
 }
 
 rule CheckCURL
